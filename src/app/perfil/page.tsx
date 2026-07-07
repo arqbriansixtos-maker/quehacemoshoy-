@@ -49,6 +49,8 @@ export default function PaginaPerfil() {
       <p>Edad: {perfil.edad ?? 'No especificada'}</p>
       <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
         <a href="/preferencias">Editar mis preferencias</a>
+        <a href="/lugares">Ver lugares</a>
+        <a href="/mapa">Ver mapa</a>
         <button onClick={cerrarSesion}>Cerrar sesión</button>
       </div>
     </div>
