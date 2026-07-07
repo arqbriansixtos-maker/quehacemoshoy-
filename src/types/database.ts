@@ -1,0 +1,42 @@
+// Estos tipos reflejan exactamente las tablas de la base de datos.
+// Sirven para que, al escribir código, el editor avise si usamos
+// un dato que no existe o con el tipo equivocado.
+
+export interface Perfil {
+  usuario_id: string
+  nombre: string
+  edad: number | null
+  ciudad: string | null
+}
+
+export interface Categoria {
+  id: string
+  nombre: string
+}
+
+export interface Lugar {
+  id: string
+  nombre: string
+  latitud: number
+  longitud: number
+  categoria_id: string
+}
+
+export interface Evento {
+  id: string
+  lugar_id: string
+  fecha_inicio: string
+  fecha_fin: string
+}
+
+export interface Publicacion {
+  id: string
+  usuario_id: string
+  lugar_id: string | null
+  texto: string
+}
+
+export interface Favorito {
+  usuario_id: string
+  lugar_id: string
+}
