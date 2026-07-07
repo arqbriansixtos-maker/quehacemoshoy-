@@ -51,6 +51,7 @@ export default function PaginaPerfil() {
         <a href="/preferencias">Editar mis preferencias</a>
         <a href="/lugares">Ver lugares</a>
         <a href="/mapa">Ver mapa</a>
+        <a href="/feed">Mi feed</a>
         <button onClick={cerrarSesion}>Cerrar sesión</button>
       </div>
     </div>
