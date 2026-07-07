@@ -20,6 +20,7 @@ export interface Lugar {
   latitud: number
   longitud: number
   categoria_id: string
+  descripcion: string | null
 }
 
 export interface Evento {
