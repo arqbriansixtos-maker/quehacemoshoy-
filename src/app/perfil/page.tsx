@@ -47,9 +47,10 @@ export default function PaginaPerfil() {
       <h1>Hola, {perfil.nombre}</h1>
       <p>Ciudad: {perfil.ciudad ?? 'No especificada'}</p>
       <p>Edad: {perfil.edad ?? 'No especificada'}</p>
-      <button onClick={cerrarSesion} style={{ marginTop: 16 }}>
-        Cerrar sesión
-      </button>
+      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+        <a href="/preferencias">Editar mis preferencias</a>
+        <button onClick={cerrarSesion}>Cerrar sesión</button>
+      </div>
     </div>
   )
 }
