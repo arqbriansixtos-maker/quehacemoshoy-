@@ -12,6 +12,8 @@ App para descubrir actividades según gustos y ubicación.
 
 ## Estado actual
 
-Módulo 0 completado: cimientos del proyecto y esquema de base de datos.
+Completado: Autenticación, Perfil, Preferencias, Lugares y Eventos oficiales,
+Mapa (con lugares y publicaciones), Feed personalizado, Publicaciones libres
+con ubicación.
 
-Próximo módulo: Autenticación + Perfil de usuario.
+Próximo módulo: IA de recomendaciones.

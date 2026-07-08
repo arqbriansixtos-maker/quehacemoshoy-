@@ -48,7 +48,10 @@ export default function PaginaLugares() {
                 {lugar.categorias?.nombre}
               </span>
             </div>
-            <p style={{ color: '#444', marginBottom: 0 }}>{lugar.descripcion}</p>
+            <p style={{ color: '#444', marginBottom: 4 }}>{lugar.descripcion}</p>
+            {lugar.fuente === 'openstreetmap' && (
+              <span style={{ fontSize: 11, color: '#2a7a2a' }}>✓ Verificado en OpenStreetMap</span>
+            )}
           </div>
         ))}
       </div>

@@ -11,6 +11,7 @@ type PublicacionConDatos = Publicacion & {
   lugares: Pick<Lugar, 'nombre'> | null
   autor: string
 }
+type Recomendacion = { id: string; razon: string }
 
 export default function PaginaFeed() {
   const [lugares, setLugares] = useState<LugarConCategoria[]>([])
@@ -18,6 +19,8 @@ export default function PaginaFeed() {
   const [publicaciones, setPublicaciones] = useState<PublicacionConDatos[]>([])
   const [tienePreferencias, setTienePreferencias] = useState(true)
   const [cargando, setCargando] = useState(true)
+  const [recomendaciones, setRecomendaciones] = useState<Recomendacion[]>([])
+  const [cargandoIA, setCargandoIA] = useState(true)
   const router = useRouter()
   const supabase = crearClienteSupabase()
 
@@ -47,6 +50,30 @@ export default function PaginaFeed() {
         : await consultaLugares.order('nombre').limit(6)
 
       setLugares((lugaresData as LugarConCategoria[]) ?? [])
+
+      // Nombres de las categorías preferidas (para dárselos a la IA en texto plano)
+      const nombresPreferenciasTexto = hayPreferencias
+        ? [...new Set(((lugaresData as LugarConCategoria[]) ?? []).map((l) => l.categorias?.nombre).filter(Boolean))]
+        : []
+
+      // Pide las recomendaciones de IA en paralelo, sin bloquear el resto del feed
+      fetch('/api/recomendaciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombrePreferencias: nombresPreferenciasTexto,
+          lugares: ((lugaresData as LugarConCategoria[]) ?? []).map((l) => ({
+            id: l.id,
+            nombre: l.nombre,
+            categoria: l.categorias?.nombre,
+            descripcion: l.descripcion,
+          })),
+        }),
+      })
+        .then((r) => r.json())
+        .then((data) => setRecomendaciones(data.recomendaciones ?? []))
+        .catch(() => setRecomendaciones([]))
+        .finally(() => setCargandoIA(false))
 
       // 3) Eventos próximos: traemos todos los que no han terminado,
       //    junto con su lugar y categoría, y filtramos en el navegador
@@ -114,6 +141,32 @@ export default function PaginaFeed() {
           mientras tanto. <a href="/preferencias">Elegir mis preferencias →</a>
         </p>
       )}
+
+      <section style={{ marginTop: 32 }}>
+        <h2>🤖 Recomendado especialmente para ti</h2>
+        {cargandoIA && <p style={{ color: '#666' }}>Pensando en los mejores planes para ti...</p>}
+        {!cargandoIA && recomendaciones.length === 0 && (
+          <p style={{ color: '#666' }}>No pudimos generar recomendaciones por ahora.</p>
+        )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {recomendaciones.map((rec) => {
+            const lugar = lugares.find((l) => l.id === rec.id)
+            if (!lugar) return null
+            return (
+              <div
+                key={rec.id}
+                style={{ border: '2px solid black', borderRadius: 8, padding: 16, background: '#fafafa' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <h3 style={{ margin: 0 }}>{lugar.nombre}</h3>
+                  <span style={{ fontSize: 12, color: '#666' }}>{lugar.categorias?.nombre}</span>
+                </div>
+                <p style={{ color: '#333', marginBottom: 0, fontStyle: 'italic' }}>💡 {rec.razon}</p>
+              </div>
+            )
+          })}
+        </div>
+      </section>
 
       <section style={{ marginTop: 32 }}>
         <h2>Lugares para ti</h2>

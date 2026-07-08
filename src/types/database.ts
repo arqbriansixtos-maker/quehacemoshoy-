@@ -23,6 +23,7 @@ export interface Lugar {
   longitud: number
   categoria_id: string
   descripcion: string | null
+  fuente: string
 }
 export interface Evento {
   id: string
@@ -34,6 +35,7 @@ export interface Publicacion {
   id: string
   usuario_id: string
   lugar_id: string | null
+  categoria_id: string | null
   texto: string
   latitud: number | null
   longitud: number | null
