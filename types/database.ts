@@ -9,9 +9,16 @@ export interface Perfil {
   ciudad: string | null
 }
 
+// Versión pública y segura de un perfil: solo lo que cualquiera puede ver.
+export interface PerfilPublico {
+  usuario_id: string
+  nombre: string
+}
+
 export interface Categoria {
   id: string
   nombre: string
+  emoji: string | null
 }
 
 export interface Lugar {
@@ -34,7 +41,11 @@ export interface Publicacion {
   id: string
   usuario_id: string
   lugar_id: string | null
+  categoria_id: string | null
+  latitud: number | null
+  longitud: number | null
   texto: string
+  creado_en: string
 }
 
 export interface Favorito {
