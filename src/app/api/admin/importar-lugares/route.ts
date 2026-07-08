@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = crearClienteAdmin()
-  const resumen: Record<string, number> = {}
+  const resumen: Record<string, number | string> = {}
 
   const { data: categorias } = await supabase.from('categorias').select('id, nombre')
   const { data: lugaresExistentes } = await supabase.from('lugares').select('nombre')
@@ -45,11 +45,16 @@ export async function GET(request: NextRequest) {
     try {
       const respuesta = await fetch('https://overpass-api.de/api/interpreter', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain',
+          'User-Agent': 'QueHaremosHoyApp/1.0 (contacto: app-quehaceshoy@ejemplo.com)',
+        },
         body: consultaOverpass,
       })
 
       if (!respuesta.ok) {
-        resumen[categoria.nombre] = 0
+        const textoError = await respuesta.text()
+        resumen[categoria.nombre] = `Error HTTP ${respuesta.status}: ${textoError.slice(0, 150)}`
         continue
       }
 
@@ -78,8 +83,8 @@ export async function GET(request: NextRequest) {
 
       // Pausa breve entre categorías para no saturar el servicio gratuito
       await new Promise((resolve) => setTimeout(resolve, 1000))
-    } catch (error) {
-      resumen[categoria.nombre] = 0
+    } catch (error: any) {
+      resumen[categoria.nombre] = `Excepción: ${error?.message ?? 'desconocida'}`
     }
   }
 
