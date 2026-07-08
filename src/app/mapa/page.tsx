@@ -123,7 +123,7 @@ export default function PaginaMapa() {
         </p>
       )}
       
-        href="/perfil"
+       <a href="/perfil"
         style={{
           position: 'absolute',
           top: 12,
@@ -139,7 +139,7 @@ export default function PaginaMapa() {
         ← Perfil
       </a>
       
-        href="/publicaciones/nueva"
+       <a href="/publicaciones/nueva"
         style={{
           position: 'absolute',
           top: 12,
